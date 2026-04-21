@@ -38,8 +38,8 @@ st.set_page_config(page_title="Planning logistique", layout="wide")
 # =============================================================================
 # CONFIG SQLITE
 # =============================================================================
-DB_FILE = "planning.db"
-#DB_FILE = "/tmp/planning.db"  # Utilisation d'un fichier temporaire pour éviter les problèmes de permissions
+#DB_FILE = "planning.db"
+DB_FILE = "/tmp/planning.db"  # Utilisation d'un fichier temporaire pour éviter les problèmes de permissions
 
 DEFAULT_USERS = {
     "admin": {"password": "admin", "role": "admin",         "name": "Administrateur"},
