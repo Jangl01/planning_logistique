@@ -454,7 +454,7 @@ def show_login():
         st.markdown("""
             <div style="text-align:center; margin-bottom:1.5rem;">
                 <div style="font-size:2.5rem; line-height:1;">📋</div>
-                <div style="font-size:1.4rem; font-weight:700; color:#1a1a2e; margin-top:0.4rem;">Planning logistiqu</div>
+                <div style="font-size:1.4rem; font-weight:700; color:#1a1a2e; margin-top:0.4rem;">Planning logistique</div>
                 <div style="font-size:0.85rem; color:#888; margin-top:0.25rem;">Connectez-vous pour accéder à votre espace</div>
             </div>
         """, unsafe_allow_html=True)
