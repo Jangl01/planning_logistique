@@ -33,7 +33,7 @@ MAX_ATTEMPTS = 5
 LOCKOUT_MINUTES = 15
 SESSION_DAYS = 30
 
-st.set_page_config(page_title="Planning logistique", layout="wide")
+st.set_page_config(page_title="Planning logistiqu", layout="wide")
 
 # =============================================================================
 # CONFIG SQLITE
