@@ -33,6 +33,8 @@ MAX_ATTEMPTS = 5
 LOCKOUT_MINUTES = 15
 SESSION_DAYS = 30
 
+TEST_MODE = True  # Mettre False pour activer la vraie connexion
+
 st.set_page_config(page_title="Planning logistique", layout="wide")
 
 # =============================================================================
@@ -485,24 +487,31 @@ def show_login():
                 else:
                     st.error(f"Compte verrouillé pour {LOCKOUT_MINUTES} minutes.")
 
-if "logged_in" not in st.session_state:
-    token = _get_cookie("session_token")
-    if token:
-        session = get_session(token)
-        if session:
-            st.session_state["logged_in"] = True
-            st.session_state["username"] = session["username"]
-            st.session_state["user_role"] = session["role"]
-            st.session_state["user_name"] = session["name"]
-            st.session_state["session_token"] = token
+if TEST_MODE:
+    st.session_state["logged_in"] = True
+    st.session_state["username"] = "admin"
+    st.session_state["user_role"] = "admin"
+    st.session_state["user_name"] = "Administrateur"
+    st.session_state.setdefault("session_token", "test")
+else:
+    if "logged_in" not in st.session_state:
+        token = _get_cookie("session_token")
+        if token:
+            session = get_session(token)
+            if session:
+                st.session_state["logged_in"] = True
+                st.session_state["username"] = session["username"]
+                st.session_state["user_role"] = session["role"]
+                st.session_state["user_name"] = session["name"]
+                st.session_state["session_token"] = token
+            else:
+                st.session_state["logged_in"] = False
         else:
             st.session_state["logged_in"] = False
-    else:
-        st.session_state["logged_in"] = False
 
-if not st.session_state["logged_in"]:
-    show_login()
-    st.stop()
+    if not st.session_state["logged_in"]:
+        show_login()
+        st.stop()
 
 # =============================================================================
 # EN-TÊTE
