@@ -38,14 +38,14 @@ st.set_page_config(page_title="Planning logistique", layout="wide")
 # =============================================================================
 # CONFIG SQLITE
 # =============================================================================
-#DB_FILE = "planning.db"
-DB_FILE = "/tmp/planning.db"  # Utilisation d'un fichier temporaire pour éviter les problèmes de permissions
+DB_FILE = "planning.db"
+#DB_FILE = "/tmp/planning.db"  # Utilisation d'un fichier temporaire pour éviter les problèmes de permissions
 
-DEFAULT_USERS = {
-    "admin": {"password": "admin", "role": "admin",         "name": "Administrateur"},
-    "chef":  {"password": "chef",  "role": "planificateur", "name": "Chef d'équipe"},
-    "op":    {"password": "op",    "role": "lecture seule", "name": "Opérateur 1"},
-}
+# DEFAULT_USERS = {
+#     "admin": {"password": "admin", "role": "admin",         "name": "Administrateur"},
+#     "chef":  {"password": "chef",  "role": "planificateur", "name": "Chef d'équipe"},
+#     "op":    {"password": "op",    "role": "lecture seule", "name": "Opérateur 1"},
+# }
 
 # =============================================================================
 # OUTILS BASE DE DONNÉES
@@ -189,6 +189,14 @@ def init_db():
         conn.execute("CREATE INDEX IF NOT EXISTS idx_planning_main_week ON planning_main(week_start)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_planning_tasks_week ON planning_tasks(week_start)")
 
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+def verify_password(password: str, stored_hash: str) -> bool:
+    if stored_hash.startswith("$2"):
+        return bcrypt.checkpw(password.encode(), stored_hash.encode())
+    return stored_hash == hashlib.sha256(password.encode()).hexdigest()
+
 def seed_default_users():
     with get_conn() as conn:
         row = conn.execute("SELECT COUNT(*) AS c FROM users").fetchone()
@@ -243,14 +251,6 @@ def _clear_auth_cookies():
 # =============================================================================
 # AUTHENTIFICATION
 # =============================================================================
-def hash_password(password: str) -> str:
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-
-def verify_password(password: str, stored_hash: str) -> bool:
-    if stored_hash.startswith("$2"):
-        return bcrypt.checkpw(password.encode(), stored_hash.encode())
-    return stored_hash == hashlib.sha256(password.encode()).hexdigest()
-
 def check_rate_limit(username: str) -> tuple:
     with get_conn() as conn:
         row = conn.execute(
