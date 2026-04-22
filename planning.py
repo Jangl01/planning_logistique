@@ -475,6 +475,7 @@ def show_login():
                 st.session_state["session_token"] = token
                 log_connexion(username, user["name"], user["role"])
                 _set_auth_cookies(token)
+                st.rerun()
             elif info == "locked":
                 st.error(f"Compte verrouillé suite à trop de tentatives. Réessayez dans {LOCKOUT_MINUTES} min.")
             else:
