@@ -197,15 +197,13 @@ def verify_password(password: str, stored_hash: str) -> bool:
     return stored_hash == hashlib.sha256(password.encode()).hexdigest()
 
 def seed_default_users():
+    now = datetime.now().isoformat()
     with get_conn() as conn:
-        row = conn.execute("SELECT COUNT(*) AS c FROM users").fetchone()
-        if row["c"] == 0:
-            now = datetime.now().isoformat()
-            for username, user in DEFAULT_USERS.items():
-                conn.execute("""
-                    INSERT INTO users (username, password_hash, role, name, created_at)
-                    VALUES (?, ?, ?, ?, ?)
-                """, (username, hash_password(user["password"]), user["role"], user["name"], now))
+        for username, user in DEFAULT_USERS.items():
+            conn.execute("""
+                INSERT OR IGNORE INTO users (username, password_hash, role, name, created_at)
+                VALUES (?, ?, ?, ?, ?)
+            """, (username, hash_password(user["password"]), user["role"], user["name"], now))
 
 def init_meta():
     with get_conn() as conn:
