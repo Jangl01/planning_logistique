@@ -234,8 +234,7 @@ def _set_auth_cookies(token: str):
     exp = "Fri, 31 Dec 2099 23:59:59 GMT"
     components.html(f"""
         <script>
-        document.cookie = "session_token={token}; path=/; expires={exp}; SameSite=Strict{secure}";
-        window.parent.location.reload();
+        document.cookie = "session_token={token}; path=/; expires={exp}; SameSite=Lax{secure}";
         </script>
     """, height=0)
 
