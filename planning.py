@@ -608,7 +608,7 @@ if page == "Gestion des utilisateurs":
     with st.form("form_add_user"):
         new_username = st.text_input("Identifiant")
         new_name = st.text_input("Nom affiché")
-        new_password = st.text_input("Mot de passe (8 caractères min.)", type="password")
+        new_password = st.text_input("Mot de passe", type="password")
         new_role = st.selectbox(
             "Rôle",
             ["lecture seule", "planificateur", "admin"],
@@ -623,8 +623,6 @@ if page == "Gestion des utilisateurs":
                 st.error("L'identifiant ne doit pas contenir d'espaces.")
             elif username_clean != new_username:
                 st.error("L'identifiant ne doit pas commencer ou finir par un espace.")
-            elif len(new_password) < 8:
-                st.error("Le mot de passe doit contenir au moins 8 caractères.")
             elif username_clean in users:
                 st.error(f"L'identifiant «{username_clean}» existe déjà.")
             else:
