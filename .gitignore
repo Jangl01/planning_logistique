@@ -1,0 +1,14 @@
+# Secrets — ne jamais commiter
+.streamlit/secrets.toml
+
+# Base de données locale
+planning.db
+
+# Données exportées
+planning_data.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env

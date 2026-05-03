@@ -17,7 +17,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from datetime import date, timedelta, datetime
-import os
 import random
 import hashlib
 import io
@@ -33,21 +32,19 @@ MAX_ATTEMPTS = 5
 LOCKOUT_MINUTES = 15
 SESSION_DAYS = 30
 
-TEST_MODE = True  # Mettre False pour activer la vraie connexion
+TEST_MODE = False  # Mettre False pour activer la vraie connexion ou True pour bypasser la connexion (compte admin)
 
 st.set_page_config(page_title="Planning logistique", layout="wide")
 
 # =============================================================================
 # CONFIG SQLITE
 # =============================================================================
-DB_FILE = "planning.db"
-#DB_FILE = "/tmp/planning.db"  # Utilisation d'un fichier temporaire pour éviter les problèmes de permissions
+DB_FILE = st.secrets.get("DB_FILE", "planning.db")
 
-# DEFAULT_USERS = {
-#     "admin": {"password": "admin", "role": "admin",         "name": "Administrateur"},
-#     "chef":  {"password": "chef",  "role": "planificateur", "name": "Chef d'équipe"},
-#     "op":    {"password": "op",    "role": "lecture seule", "name": "Opérateur 1"},
-# }
+_admin_pwd = st.secrets.get("ADMIN_PASSWORD", "admin")
+DEFAULT_USERS = {
+    "admin": {"password": _admin_pwd, "role": "admin", "name": "Administrateur"},
+}
 
 # =============================================================================
 # OUTILS BASE DE DONNÉES
